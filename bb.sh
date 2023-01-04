@@ -304,7 +304,7 @@ update_domain_app (){
 
 update () {
     local arg=("$@")
-    if [ -z "$arg" ]
+    if [ "$arg" ]
     then
       update_domain_app
       exit 0
