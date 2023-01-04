@@ -293,6 +293,7 @@ update_domain_app (){
     fi
   else
     update_domain_usage
+    exit 1
   fi
   local container_name="${domain//./-}-${app}"
   local envfile="/opt/${domain}/${app}/${domain}.env"
