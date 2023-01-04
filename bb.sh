@@ -276,8 +276,38 @@ install () {
 
 }
 
-update () {
+update_domain_usage (){
+  echo "Usage:"
+  echo "    bb update domain.tld app                    Update application env file and restart container."
+}
 
+update_domain_app (){
+  local re="^(\S+[.].\S+){1}\s(\S+){1}$"
+  local args
+  if [[ "$args" =~ $re ]]
+  then
+    local domain="${BASH_REMATCH[1]}"
+    local app="${BASH_REMATCH[2]}"
+    if [[ "X${app}" == "Xinvoiceninja" ]]; then
+      app="invoice"
+    fi
+  else
+    update_domain_usage
+  fi
+  local container_name="${domain//./-}-${app}"
+  local envfile="/opt/${domain}/${app}/${domain}.env"
+  nano envfile
+
+  install "$domain $app"
+}
+
+update () {
+    local arg=("$@")
+    if [ -z "$arg" ]
+    then
+      update_domain_app
+      exit 0
+    fi
     if [[ -d "${BIZBOX_REPO_PATH}" ]]
     then
         echo -e "Updating Bizbox...\n"
@@ -432,14 +462,20 @@ update-ansible () {
     bash "/srv/git/bizbox/scripts/update.sh"
 }
 
+uninstall (){
+  echo "Not supported yet !"
+  exit 0
+}
+
 usage () {
     echo "Usage:"
     echo "    bb update                                       Update Bizbox."
     echo "    bb list                                         List Bizbox tags."
-    echo "    bb install [<domain name>] <tag> [--primary]    Install <tag> using [<domain name>]."
-    echo "        example: bb install mydomain.com sandbox-wordpress,sandbox-invoiceninja --primary"
+    echo "    bb install <domain name> <tag> [--primary]    Install <tag> using [<domain name>]."
+    echo "        example: bb install domain.tld sandbox-wordpress,sandbox-invoiceninja --primary"
     echo "    bb update-ansible                               Re-install Ansible."
 }
+
 
 ################################
 # Update check
@@ -479,12 +515,13 @@ case "$subcommand" in
         list
         ;;
     update)
-        update
+        parameters=${*}
+        update "${parameters}"
         sandbox-update
         ;;
     install)
-        roles=${*}
-        install "${roles}"
+        parameters=${*}
+        install "${parameters}"
         ;;
     branch)
         bizbox-branch "${*}"
@@ -494,6 +531,9 @@ case "$subcommand" in
         ;;
     update-ansible)
         update-ansible
+        ;;
+    uninstall)
+        uninstall "${*}"
         ;;
     "") echo "A command is required."
         echo ""
