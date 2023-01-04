@@ -292,6 +292,8 @@ update_domain_app (){
       app="invoice"
     fi
   else
+    echo "Invalid Option: -$OPTARG" 1>&2
+    echo ""
     update_domain_usage
     exit 1
   fi
