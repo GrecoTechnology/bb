@@ -283,7 +283,7 @@ update_domain_usage (){
 
 update_domain_app (){
   local re="^(\S+[.].\S+){1}\s(\S+){1}$"
-  local args
+  local args=${*}
   if [[ "$args" =~ $re ]]
   then
     local domain="${BASH_REMATCH[1]}"
@@ -308,7 +308,7 @@ update () {
     local arg=("$@")
     if [ "$arg" ]
     then
-      update_domain_app
+      update_domain_app "$arg"
       exit 0
     fi
     if [[ -d "${BIZBOX_REPO_PATH}" ]]
