@@ -472,7 +472,7 @@ usage () {
     echo "Usage:"
     echo "    bb update                                       Update Bizbox."
     echo "    bb list                                         List Bizbox tags."
-    echo "    bb install <domain name> <tag> [--primary]    Install <tag> using [<domain name>]."
+    echo "    bb install <domain name> <tag> [--primary]      Install <tag> using [<domain name>]."
     echo "        example: bb install domain.tld sandbox-wordpress,sandbox-invoiceninja --primary"
     echo "    bb update-ansible                               Re-install Ansible."
 }
