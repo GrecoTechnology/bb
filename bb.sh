@@ -203,7 +203,7 @@ install () {
         fi
     done
     if [[ $primary_domain == "--primary" && "X${domain}" != "X" ]]; then
-	    run_playbook_bb "--tags traefik -e domain=$domain"
+	    run_playbook_bb "--tags traefik,portainer -e domain=$domain"
     fi
 
     # Bizbox Ansible Playbook
@@ -298,7 +298,7 @@ update_domain_app (){
     exit 1
   fi
   local container_name="${domain//./-}-${app}"
-  local envfile="/opt/${domain}/${app}/${domain}.env"
+  local envfile="/opt/${domain}/${app}/env.yml"
   nano envfile
 
   install "$domain $app"
@@ -466,8 +466,58 @@ update-ansible () {
 }
 
 uninstall (){
-  echo "Not supported yet !"
-  exit 0
+  local arg=("$@")
+
+    if [ -z "$arg" ]
+    then
+      echo -e "No Uninstall tag was provided.\n"
+      usage
+      exit 1
+    fi
+
+    echo "${arg[*]}"
+
+    # Remove space after comma
+    # shellcheck disable=SC2128,SC2001
+    local arg_clean
+    arg_clean=${arg//, /,}
+
+    # Split tags from extra arguments
+    # https://stackoverflow.com/a/10520842
+    local re="^(\S+[.].\S+)?\s(\S+)\s?(all)?$"
+    if [[ "$arg_clean" =~ $re ]]; then
+        local domain="${BASH_REMATCH[1]}"
+        local tags_arg="${BASH_REMATCH[2]}"
+        local all="${BASH_REMATCH[3]}"
+    else
+        echo "Invalid arguments"
+        usage
+        exit 1
+    fi
+
+    if [[ "X${domain}" != "X" ]]; then
+	    extra_arg="-e domain=$domain"
+    fi
+
+    if [[ "X${all}" != "X" ]]; then
+	    extra_arg="${extra_arg},all=true"
+    fi
+
+    extra_arg="${extra_arg},apps=${tags_arg}"
+
+    local arguments_bb="--tags uninstall"
+
+    if [[ -n "$extra_arg" ]]; then
+      arguments_bb="${arguments_bb} ${extra_arg}"
+    fi
+
+    # Run playbook
+        echo ""
+        echo "Running Bizbox Tags: ${tags_arg//,/,  }"
+        echo ""
+        run_playbook_bb "$arguments_bb"
+        echo ""
+
 }
 
 usage () {
@@ -475,7 +525,9 @@ usage () {
     echo "    bb update                                       Update Bizbox."
     echo "    bb list                                         List Bizbox tags."
     echo "    bb install <domain name> <tag> [--primary]      Install <tag> using [<domain name>]."
-    echo "        example: bb install domain.tld sandbox-wordpress,sandbox-invoiceninja --primary"
+    echo "        example: bb install domain.tld wordpress,invoiceninja --primary"
+    echo "    bb uninstall <domain name> <tag>                Uninstall <tag> using <domain name>."
+    echo "        example: bb uninstall domain.tld wordpress,invoiceninja"
     echo "    bb update-ansible                               Re-install Ansible."
 }
 
