@@ -496,14 +496,14 @@ uninstall (){
     fi
 
     if [[ "X${domain}" != "X" ]]; then
-	    extra_arg="-e domain=$domain"
+	    extra_arg="--extra-var domain=$domain"
     fi
 
     if [[ "X${all}" != "X" ]]; then
-	    extra_arg="$extra_arg,all=true"
+	    extra_arg="$extra_arg all=true"
     fi
 
-    extra_arg="$extra_arg,apps=$tags_arg"
+    extra_arg="$extra_arg apps=$tags_arg"
 
     local arguments_bb="--tags uninstall"
 
