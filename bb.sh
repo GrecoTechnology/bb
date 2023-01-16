@@ -496,18 +496,20 @@ uninstall (){
     fi
 
     if [[ "X${domain}" != "X" ]]; then
-	    extra_arg="domain=$domain all=$([[ "$all" == "all" ]] && echo "true" || echo "false") apps=$tags_arg"
+	    extra_arg= "\"domain=$domain all=$([[ "$all" == "all" ]] && echo "true" || echo "false") apps=$tags_arg\""
     fi
 
     local arguments_bb="--tags uninstall"
 
-
+    if [[ -n "$extra_arg" ]]; then
+      arguments_bb="${arguments_bb} ${extra_arg}"
+    fi
     echo "$arguments_bb"
     # Run playbook
         echo ""
         echo "Running Bizbox Tags: ${tags_arg//,/,  }"
         echo ""
-        run_playbook_bb "$arguments_bb" "--extra-vars" "$extra_arg"
+        run_playbook_bb "$arguments_bb"
         echo ""
 }
 
