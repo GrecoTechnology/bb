@@ -500,24 +500,23 @@ uninstall (){
     fi
 
     if [[ "X${all}" != "X" ]]; then
-	    extra_arg="${extra_arg},all=true"
+	    extra_arg="$extra_arg,all=true"
     fi
 
-    extra_arg="${extra_arg},apps=${tags_arg}"
+    extra_arg="$extra_arg,apps=$tags_arg"
 
     local arguments_bb="--tags uninstall"
 
     if [[ -n "$extra_arg" ]]; then
       arguments_bb="${arguments_bb} ${extra_arg}"
     fi
-
+    echo "$arguments_bb"
     # Run playbook
         echo ""
         echo "Running Bizbox Tags: ${tags_arg//,/,  }"
         echo ""
         run_playbook_bb "$arguments_bb"
         echo ""
-
 }
 
 usage () {
