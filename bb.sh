@@ -496,7 +496,7 @@ uninstall (){
     fi
 
     if [[ "X${domain}" != "X" ]]; then
-	    extra_arg="-e \"domain=$domain all=$([[ "$all" == "all" ]] && echo "true" || echo "false") apps=$tags_arg\""
+	    extra_arg="-e domain=$domain -e all=$([[ "$all" == "all" ]] && echo "true" || echo "false") -e apps=$tags_arg"
     fi
 
     local arguments_bb="--tags uninstall"
