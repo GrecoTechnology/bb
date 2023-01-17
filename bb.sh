@@ -520,7 +520,7 @@ uninstall (){
 
 usage () {
     echo "Usage:"
-    echo "    bb update-bb                                    Update bb CLI."
+    echo "    bb update-bb                                    Update bb Cli."
     echo "    bb update                                       Update Bizbox."
     echo "    bb list                                         List Bizbox tags."
     echo "    bb install <domain name> <tag> [--primary]      Install <tag> using [<domain name>]."
