@@ -305,12 +305,6 @@ update_domain_app (){
 }
 
 update () {
-    local arg=("$@")
-    if [ "$arg" ]
-    then
-      update_domain_app "$arg"
-      exit 0
-    fi
     if [[ -d "${BIZBOX_REPO_PATH}" ]]
     then
         echo -e "Updating Bizbox...\n"
@@ -526,6 +520,7 @@ uninstall (){
 
 usage () {
     echo "Usage:"
+    echo "    bb update-bb                                    Update bb CLI."
     echo "    bb update                                       Update Bizbox."
     echo "    bb list                                         List Bizbox tags."
     echo "    bb install <domain name> <tag> [--primary]      Install <tag> using [<domain name>]."
@@ -574,9 +569,11 @@ case "$subcommand" in
         list
         ;;
     update)
-        parameters=${*}
-        update "${parameters}"
+        update
         sandbox-update
+        ;;
+    update-bb)
+        bb-update
         ;;
     install)
         parameters=${*}
