@@ -484,7 +484,7 @@ uninstall (){
 
     # Split tags from extra arguments
     # https://stackoverflow.com/a/10520842
-    local re="^(\S+[.].\S+)?\s(\S+)\s?(all)?$"
+    local re="^(\S+[.].\S+)?\s(\S?)\s?(--all)?$"
     if [[ "$arg_clean" =~ $re ]]; then
         local domain="${BASH_REMATCH[1]}"
         local tags_arg="${BASH_REMATCH[2]}"
@@ -496,7 +496,15 @@ uninstall (){
     fi
 
     if [[ "X${domain}" != "X" ]]; then
-	    extra_arg="-e domain=$domain -e all=$([[ "$all" == "all" ]] && echo "true" || echo "false") -e apps=$tags_arg"
+	    extra_arg="-e domain=$domain"
+    fi
+
+    if [[ "$all" == "--all" ]]; then
+	    extra_arg="$extra_arg -e all=true"
+    fi
+
+    if [[ -n $tags_arg ]]; then
+	    extra_arg="$extra_arg -e apps=$tags_arg"
     fi
 
     local arguments_bb="--tags uninstall"
