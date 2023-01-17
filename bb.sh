@@ -499,8 +499,11 @@ uninstall (){
 	    extra_arg="-e domain=$domain"
     fi
 
-    if [[ "$all" == "--all" ]]; then
+    if [[ "$all" == "--all" ]]
+    then
 	    extra_arg="$extra_arg -e all=true"
+	  else
+	    extra_arg="$extra_arg -e all=false"
     fi
 
     if [[ -n $tags_arg ]]; then
