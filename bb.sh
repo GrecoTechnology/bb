@@ -165,7 +165,7 @@ install () {
 
     # Split tags from extra arguments
     # https://stackoverflow.com/a/10520842
-    local re="^(\S+[.].\S+)?\s(\S+)\s?(--primary)?(-.*)?$"
+    local re="^(\S+[.].\S+)?\s([^-]+)?\s?(--primary)?(-.*)?$"
     if [[ "$arg_clean" =~ $re ]]; then
         local domain="${BASH_REMATCH[1]}"
         local tags_arg="${BASH_REMATCH[2]}"
