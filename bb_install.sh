@@ -147,7 +147,6 @@ for i in "$BB_PATH"/*.sh; do
         run_cmd ln -s "${i}" "/usr/local/bin/$(basename "${i%.*}")"
     fi
 done
-shopt -u nullglob
 
 # Install Bizbox Dependencies
 run_cmd bash -H $BB_PATH/bb_dep.sh $VERBOSE_OPT
