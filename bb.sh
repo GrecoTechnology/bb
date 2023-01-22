@@ -525,7 +525,7 @@ usage () {
     echo "    bb list                                         List Bizbox tags."
     echo "    bb install <domain name> <tag> [--primary]      Install <tag> using [<domain name>]."
     echo "        example: bb install domain.tld wordpress,invoiceninja --primary"
-    echo "    bb uninstall <domain name> <tag>                Uninstall <tag> using <domain name>."
+    echo "    bb uninstall <domain name> <tag> [--all]        Uninstall <tag> using <domain name>."
     echo "        example: bb uninstall domain.tld wordpress,invoiceninja"
     echo "    bb update-ansible                               Re-install Ansible."
 }
