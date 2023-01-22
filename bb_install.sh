@@ -141,7 +141,6 @@ $VERBOSE && echo "Script Path: $SCRIPT_PATH"
 $VERBOSE && echo "BB Install Path: "$BB_INSTALL_SCRIPT
 
 ## Create script symlinks in /usr/local/bin
-shopt -s nullglob
 for i in "$BB_PATH"/*.sh; do
     if [ ! -f "/usr/local/bin/$(basename "${i%.*}")" ]; then
         run_cmd ln -s "${i}" "/usr/local/bin/$(basename "${i%.*}")"
