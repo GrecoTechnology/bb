@@ -13,7 +13,7 @@
 # Variables
 ################################
 
-VERBOSE=false
+VERBOSE=true
 VERBOSE_OPT=""
 SUPPORT=true
 BB_REPO="https://github.com/GrecoTechnology/bb.git"
