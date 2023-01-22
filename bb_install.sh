@@ -13,7 +13,7 @@
 # Variables
 ################################
 
-VERBOSE=true
+VERBOSE=false
 VERBOSE_OPT=""
 SUPPORT=true
 BB_REPO="https://github.com/GrecoTechnology/bb.git"
@@ -77,7 +77,7 @@ for directory in /home/*/*/ ; do
 done
 
 # Check for supported Ubuntu Releases
-release=$(lbb_release -cs)
+release=$(lsb_release -cs)
 
 # Add more releases like (focal|jammy)$
 if [[ $release =~ (focal|jammy)$ ]]; then
