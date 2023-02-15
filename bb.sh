@@ -518,6 +518,65 @@ uninstall (){
         echo ""
 }
 
+reinstall (){
+  local arg=("$@")
+
+    if [ -z "$arg" ]
+    then
+      echo -e "No Reinstall tag was provided.\n"
+      usage
+      exit 1
+    fi
+
+    echo "${arg[*]}"
+
+    # Remove space after comma
+    # shellcheck disable=SC2128,SC2001
+    local arg_clean
+    arg_clean=${arg//, /,}
+
+    # Split tags from extra arguments
+    # https://stackoverflow.com/a/10520842
+    local re="^(\S+[.].\S+)?\s([^-]+)?\s?(--all)?$"
+    if [[ "$arg_clean" =~ $re ]]; then
+        local domain="${BASH_REMATCH[1]}"
+        local tags_arg="${BASH_REMATCH[2]}"
+        local all="${BASH_REMATCH[3]}"
+    else
+        echo "Invalid arguments"
+        usage
+        exit 1
+    fi
+
+    if [[ "X${domain}" != "X" ]]; then
+	    extra_arg="-e domain=$domain"
+    fi
+
+    if [[ "$all" == "--all" ]]
+    then
+	    extra_arg="$extra_arg -e all=true"
+	  else
+	    extra_arg="$extra_arg -e all=false"
+    fi
+
+    if [[ -n $tags_arg ]]; then
+	    extra_arg="$extra_arg -e apps=$tags_arg"
+    fi
+
+    local arguments_bb="--tags reinstall"
+
+    if [[ -n "$extra_arg" ]]; then
+      arguments_bb="${arguments_bb} ${extra_arg}"
+    fi
+    echo "$arguments_bb"
+    # Run playbook
+        echo ""
+        echo "Running Bizbox Tags: ${tags_arg//,/,  }"
+        echo ""
+        run_playbook_bb "$arguments_bb"
+        echo ""
+}
+
 usage () {
     echo "Usage:"
     echo "    bb update-bb                                    Update bb Cli."
@@ -527,6 +586,8 @@ usage () {
     echo "        example: bb install domain.tld wordpress,invoiceninja --primary"
     echo "    bb uninstall <domain name> <tag> [--all]        Uninstall <tag> using <domain name>."
     echo "        example: bb uninstall domain.tld wordpress,invoiceninja"
+    echo "    bb reinstall <domain name> <tag> [--all]        Reinstall <tag> using <domain name>."
+    echo "        example: bb reinstall domain.tld wordpress,invoiceninja"
     echo "    bb update-ansible                               Re-install Ansible."
 }
 
@@ -590,6 +651,9 @@ case "$subcommand" in
         ;;
     uninstall)
         uninstall "${*}"
+        ;;
+    reinstall)
+        reinstall "${*}"
         ;;
     "") echo "A command is required."
         echo ""
