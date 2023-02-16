@@ -560,7 +560,7 @@ reinstall (){
 	    extra_arg="$extra_arg -e all=false"
     fi
 
-    if [[ "$all" == "--force" ]]
+    if [[ "$force" == "--force" ]]
     then
 	    extra_arg="$extra_arg -e force=true"
 	  else
