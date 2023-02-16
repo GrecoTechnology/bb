@@ -509,7 +509,7 @@ uninstall (){
     if [[ -n "$extra_arg" ]]; then
       arguments_bb="${arguments_bb} ${extra_arg}"
     fi
-    echo "$arguments_bb"
+
     # Run playbook
         echo ""
         echo "Running Bizbox Tags: ${tags_arg//,/,  }"
@@ -537,11 +537,12 @@ reinstall (){
 
     # Split tags from extra arguments
     # https://stackoverflow.com/a/10520842
-    local re="^(\S+[.].\S+)?\s([^-]+)?\s?(--all)?$"
+    local re="^(\S+[.].\S+)?\s([^-]+)?\s?(--all)?(--force)?$"
     if [[ "$arg_clean" =~ $re ]]; then
         local domain="${BASH_REMATCH[1]}"
         local tags_arg="${BASH_REMATCH[2]}"
         local all="${BASH_REMATCH[3]}"
+        local force="${BASH_REMATCH[4]}"
     else
         echo "Invalid arguments"
         usage
@@ -559,6 +560,13 @@ reinstall (){
 	    extra_arg="$extra_arg -e all=false"
     fi
 
+    if [[ "$all" == "--force" ]]
+    then
+	    extra_arg="$extra_arg -e force=true"
+	  else
+	    extra_arg="$extra_arg -e force=false"
+    fi
+
     if [[ -n $tags_arg ]]; then
 	    extra_arg="$extra_arg -e apps=$tags_arg"
     fi
@@ -568,7 +576,7 @@ reinstall (){
     if [[ -n "$extra_arg" ]]; then
       arguments_bb="${arguments_bb} ${extra_arg}"
     fi
-    echo "$arguments_bb"
+
     # Run playbook
         echo ""
         echo "Running Bizbox Tags: ${tags_arg//,/,  }"
