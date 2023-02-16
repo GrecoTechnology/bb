@@ -587,16 +587,16 @@ reinstall (){
 
 usage () {
     echo "Usage:"
-    echo "    bb update-bb                                    Update bb Cli."
-    echo "    bb update                                       Update Bizbox."
-    echo "    bb list                                         List Bizbox tags."
-    echo "    bb install <domain name> <tag> [--primary]      Install <tag> using [<domain name>]."
+    echo "    bb update-bb                                        Update bb Cli."
+    echo "    bb update                                           Update Bizbox."
+    echo "    bb list                                             List Bizbox tags."
+    echo "    bb install <domain name> <tag> [--primary]          Install <tag> using [<domain name>]."
     echo "        example: bb install domain.tld wordpress,invoiceninja --primary"
-    echo "    bb uninstall <domain name> <tag> [--all]        Uninstall <tag> using <domain name>."
+    echo "    bb uninstall <domain name> <tag> [--all]            Uninstall <tag> using <domain name>."
     echo "        example: bb uninstall domain.tld wordpress,invoiceninja"
-    echo "    bb reinstall <domain name> <tag> [--all]        Reinstall <tag> using <domain name>."
+    echo "    bb reinstall <domain name> <tag> [--all] [--force]  Reinstall <tag> using <domain name>."
     echo "        example: bb reinstall domain.tld wordpress,invoiceninja"
-    echo "    bb update-ansible                               Re-install Ansible."
+    echo "    bb update-ansible                                   Re-install Ansible."
 }
 
 
