@@ -537,12 +537,11 @@ reinstall (){
 
     # Split tags from extra arguments
     # https://stackoverflow.com/a/10520842
-    local re="^(\S+[.].\S+)?\s([^-]+)?\s?(--all)?\s?(--force)?$"
+    local re="^(\S+[.].\S+)?\s([^-]+)?\s?((--all|--force)?\s?(--all|--force)?)?$"
     if [[ "$arg_clean" =~ $re ]]; then
         local domain="${BASH_REMATCH[1]}"
         local tags_arg="${BASH_REMATCH[2]}"
-        local all="${BASH_REMATCH[3]}"
-        local force="${BASH_REMATCH[4]}"
+        local flags="${BASH_REMATCH[3]}"
     else
         echo "Invalid arguments"
         usage
@@ -553,14 +552,14 @@ reinstall (){
 	    extra_arg="-e domain=$domain"
     fi
 
-    if [[ "$all" == "--all" ]]
+    if [[ "$flags" == *--all* ]]
     then
 	    extra_arg="$extra_arg -e all=true"
 	  else
 	    extra_arg="$extra_arg -e all=false"
     fi
 
-    if [[ "$force" == "--force" ]]
+    if [[ "$force" == *--force* ]]
     then
 	    extra_arg="$extra_arg -e force=true"
 	  else
