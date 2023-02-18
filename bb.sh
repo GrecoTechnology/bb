@@ -518,6 +518,36 @@ uninstall (){
         echo ""
 }
 
+restart (){
+  local arg=("$@")
+
+  if [ -z "$arg" ]
+    then
+      echo -e "No Restart tag was provided.\n"
+      usage
+      exit 1
+    fi
+  echo "${arg[*]}"
+
+  # Remove comma
+  local arg_clean
+  arg_clean=${arg//,/ }
+
+  # Split tags from extra arguments
+  # https://stackoverflow.com/a/10520842
+  local re="^(\S+[.].\S+)?\s([^-]+)?$"
+  if [[ "$arg_clean" =~ $re ]]; then
+      local domain="${BASH_REMATCH[1]}"
+      local tags_arg="${BASH_REMATCH[2]}"
+  else
+      echo "Invalid arguments"
+      usage
+      exit 1
+  fi
+
+  docker restart "${arg_clean}"
+}
+
 reinstall (){
   local arg=("$@")
 
@@ -595,6 +625,8 @@ usage () {
     echo "        example: bb uninstall domain.tld wordpress,invoiceninja"
     echo "    bb reinstall <domain name> <tag> [--all] [--force]  Reinstall <tag> using <domain name>."
     echo "        example: bb reinstall domain.tld wordpress,invoiceninja"
+    echo "    bb restart <domain name> <tag>                      Restart   <tag> using <domain name>."
+    echo "        example: bb restart domain.tld wordpress,invoiceninja"
     echo "    bb update-ansible                                   Re-install Ansible."
 }
 
@@ -661,6 +693,9 @@ case "$subcommand" in
         ;;
     reinstall)
         reinstall "${*}"
+        ;;
+    restart)
+        restart "${*}"
         ;;
     "") echo "A command is required."
         echo ""
