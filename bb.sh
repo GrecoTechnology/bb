@@ -529,9 +529,8 @@ restart (){
     fi
   echo "${arg[*]}"
 
-  # Remove comma
   local arg_clean
-  arg_clean=${arg//,/ }
+  arg_clean=${arg//, /,}
 
   # Split tags from extra arguments
   # https://stackoverflow.com/a/10520842
@@ -545,7 +544,23 @@ restart (){
       exit 1
   fi
 
-  docker restart "${arg_clean}"
+  # Save tags into 'tags' array
+  # shellcheck disable=SC2206
+  local tags_tmp=(${tags_arg//,/ })
+
+  # Remove duplicate entries from array
+  # https://stackoverflow.com/a/31736999
+  local tags=()
+  readarray -t tags < <(printf '%s\n' "${tags_tmp[@]}" | awk '!x[$0]++')
+
+  local apps=""
+
+  for i in "${!tags[@]}"
+  do
+    apps="${apps} ${domain//./-}-${tags[i]}"
+  done
+
+  docker restart "${apps}"
 }
 
 reinstall (){
