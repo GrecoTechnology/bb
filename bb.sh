@@ -560,7 +560,7 @@ restart (){
     apps="${apps} ${domain//./-}-${tags[i]}"
   done
 
-  docker restart "${apps}"
+  docker restart ${apps}
 }
 
 reinstall (){
