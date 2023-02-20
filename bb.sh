@@ -606,6 +606,7 @@ reinstall (){
 
     if [[ "$flags" == *--force* ]]
     then
+      echo "--------- force reinstall -----------------"
 	    extra_arg="$extra_arg -e force=true"
 	  else
 	    extra_arg="$extra_arg -e force=false"
