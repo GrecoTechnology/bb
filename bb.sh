@@ -604,7 +604,7 @@ reinstall (){
 	    extra_arg="$extra_arg -e all=false"
     fi
 
-    if [[ "$force" == *--force* ]]
+    if [[ "$flags" == *--force* ]]
     then
 	    extra_arg="$extra_arg -e force=true"
 	  else
