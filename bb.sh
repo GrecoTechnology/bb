@@ -631,18 +631,18 @@ reinstall (){
 
 usage () {
     echo "Usage:"
-    echo "    bb update-bb                                        Update bb Cli.\n"
+    echo -e "    bb update-bb                                        Update bb Cli.\n"
     echo -e "    bb update                                           Update Bizbox.\n"
-    echo "    bb list                                             List Bizbox tags.\n"
-    echo "    bb install <domain name> <tag> [--primary]          Install <tag> using <domain name>."
-    echo "        example: bb install domain.tld wordpress,invoiceninja --primary\n"
-    echo "    bb uninstall <domain name> <tag> [--all]            Uninstall <tag> using <domain name>."
-    echo "        example: bb uninstall domain.tld wordpress,invoiceninja\n"
-    echo "    bb reinstall <domain name> <tag> [--all] [--force]  Reinstall <tag> using <domain name>."
-    echo "        example: bb reinstall domain.tld wordpress,invoiceninja\n"
-    echo "    bb restart <domain name> <tag>                      Restart   <tag> using <domain name>."
-    echo "        example: bb restart domain.tld wordpress,invoiceninja\n"
-    echo "    bb update-ansible                                   Re-install Ansible.\n"
+    echo -e "    bb list                                             List Bizbox tags.\n"
+    echo -e "    bb install <domain name> <tag> [--primary]          Install <tag> using <domain name>."
+    echo -e "        example: bb install domain.tld wordpress,invoiceninja --primary\n"
+    echo -e "    bb uninstall <domain name> <tag> [--all]            Uninstall <tag> using <domain name>."
+    echo -e "        example: bb uninstall domain.tld wordpress,invoiceninja\n"
+    echo -e "    bb reinstall <domain name> <tag> [--all] [--force]  Reinstall <tag> using <domain name>."
+    echo -e "        example: bb reinstall domain.tld wordpress,invoiceninja\n"
+    echo -e "    bb restart <domain name> <tag>                      Restart   <tag> using <domain name>."
+    echo -e "        example: bb restart domain.tld wordpress,invoiceninja\n"
+    echo -e "    bb update-ansible                                   Re-install Ansible.\n"
 }
 
 
