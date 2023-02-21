@@ -632,7 +632,7 @@ reinstall (){
 usage () {
     echo "Usage:"
     echo "    bb update-bb                                        Update bb Cli.\n"
-    echo "    bb update                                           Update Bizbox.\n"
+    echo -e "    bb update                                           Update Bizbox.\n"
     echo "    bb list                                             List Bizbox tags.\n"
     echo "    bb install <domain name> <tag> [--primary]          Install <tag> using <domain name>."
     echo "        example: bb install domain.tld wordpress,invoiceninja --primary\n"
