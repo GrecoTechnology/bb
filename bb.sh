@@ -665,7 +665,7 @@ clone (){
     fi
 
     if [[ "X${dst_domain}" != "X" ]]; then
-	    extra_arg="-e domain=$dst_domain"
+	    extra_arg="$extra_arg -e domain=$dst_domain"
     fi
 
     if [[ "$all" == "--all" ]]
