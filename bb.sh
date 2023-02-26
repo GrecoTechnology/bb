@@ -629,20 +629,87 @@ reinstall (){
         echo ""
 }
 
+clone (){
+  local arg=("$@")
+
+    if [ -z "$arg" ]
+    then
+      echo -e "No Clone tag was provided.\n"
+      usage
+      exit 1
+    fi
+
+    echo "${arg[*]}"
+
+    # Remove space after comma
+    # shellcheck disable=SC2128,SC2001
+    local arg_clean
+    arg_clean=${arg//, /,}
+
+    # Split tags from extra arguments
+    # https://stackoverflow.com/a/10520842
+    local re="^(\S+[.].\S+){1}\s(\S+[.].\S+){1}\s([^-]+)?\s?(--all)?$"
+    if [[ "$arg_clean" =~ $re ]]; then
+        local src_domain="${BASH_REMATCH[1]}"
+        local dst_domain="${BASH_REMATCH[2]}"
+        local tags_arg="${BASH_REMATCH[3]}"
+        local all="${BASH_REMATCH[4]}"
+    else
+        echo "Invalid arguments"
+        usage
+        exit 1
+    fi
+
+    if [[ "X${src_domain}" != "X" ]]; then
+	    extra_arg="-e src_domain=$src_domain"
+    fi
+
+    if [[ "X${dst_domain}" != "X" ]]; then
+	    extra_arg="-e domain=$dst_domain"
+    fi
+
+    if [[ "$all" == "--all" ]]
+    then
+	    extra_arg="$extra_arg -e all=true"
+	  else
+	    extra_arg="$extra_arg -e all=false"
+    fi
+
+    if [[ -n $tags_arg ]]; then
+	    extra_arg="$extra_arg -e apps=$tags_arg"
+    fi
+
+    local arguments_bb="--tags clone"
+
+    if [[ -n "$extra_arg" ]]; then
+      arguments_bb="${arguments_bb} ${extra_arg}"
+    fi
+
+    # Run playbook
+        echo ""
+        echo "Running Bizbox Tags: ${tags_arg//,/,  }"
+        echo ""
+        run_playbook_bb "$arguments_bb"
+        echo ""
+
+}
+
 usage () {
     echo "Usage:"
-    echo -e "    bb update-bb                                        Update bb Cli.\n"
-    echo -e "    bb update                                           Update Bizbox.\n"
-    echo -e "    bb list                                             List Bizbox tags.\n"
-    echo -e "    bb install <domain name> <tag> [--primary]          Install <tag> using <domain name>."
+    echo -e "    bb update-bb                                                              Update bb Cli.\n"
+    echo -e "    bb update                                                                 Update Bizbox.\n"
+    echo -e "    bb list                                                                   List Bizbox tags.\n"
+    echo -e "    bb install <domain name> <tags> [--primary]                               Install <tags> using <domain name>."
     echo -e "        example: bb install domain.tld wordpress,invoiceninja --primary\n"
-    echo -e "    bb uninstall <domain name> <tag> [--all]            Uninstall <tag> using <domain name>."
+    echo -e "    bb clone <source domain name> <destination domain name> [tags] [--all]    Clone [tags] using <source domain name> to <destination domain name>."
+    echo -e "        example: bb clone src-domain.tld dst-domain.tld wordpress,invoiceninja\n"
+    echo -e "    bb uninstall <domain name> [tags] [--all]                                 Uninstall [tags] using <domain name>."
     echo -e "        example: bb uninstall domain.tld wordpress,invoiceninja\n"
-    echo -e "    bb reinstall <domain name> <tag> [--all] [--force]  Reinstall <tag> using <domain name>."
+    echo -e "    bb reinstall <domain name> [tags] [--all] [--force]                       Reinstall [tags] using <domain name>."
     echo -e "        example: bb reinstall domain.tld wordpress,invoiceninja\n"
-    echo -e "    bb restart <domain name> <tag>                      Restart   <tag> using <domain name>."
+    echo -e "    bb restart <domain name> <tags>                                           Restart   <tags> using <domain name>."
     echo -e "        example: bb restart domain.tld wordpress,invoiceninja\n"
-    echo -e "    bb update-ansible                                   Re-install Ansible.\n"
+    echo -e "    bb update-ansible                                                         Re-install Ansible.\n"
 }
 
 
@@ -705,6 +772,9 @@ case "$subcommand" in
         ;;
     uninstall)
         uninstall "${*}"
+        ;;
+    clone)
+        clone "${*}"
         ;;
     reinstall)
         reinstall "${*}"
